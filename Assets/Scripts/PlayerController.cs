@@ -5,8 +5,11 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public float moveSpeed;
+    public float jumpForce;
 
     public Rigidbody2D rb;
+    
+    public GroundCheck groundCheck;
     
     // Start is called before the first frame update
     void Start()
@@ -17,7 +20,15 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float userInput = Input.GetAxis("Horizontal");
-        rb.velocity = new Vector2(moveSpeed * userInput, rb.velocity.y);
+        float hSpeed = Input.GetAxis("Horizontal") * moveSpeed;
+        float vSpeed = rb.velocity.y;
+
+        if (groundCheck.GetContinuousJumpTimes() != 2 && Input.GetButtonDown("Jump"))
+        {
+            groundCheck.PlusContinuousJumpTimes();
+            vSpeed = jumpForce;
+        }
+
+        rb.velocity = new Vector2(hSpeed, vSpeed);
     }
 }
