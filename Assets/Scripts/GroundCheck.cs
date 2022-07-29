@@ -6,7 +6,7 @@ using UnityEngine;
 public class GroundCheck : MonoBehaviour
 {
     // 记录玩家是否在地面
-    private bool isGrounded;
+    private bool isGrounded = true;
     
     // 为了实现二段跳功能，记录玩家连续的跳跃次数
     private int continuousJumpTimes;

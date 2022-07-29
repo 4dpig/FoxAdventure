@@ -12,7 +12,7 @@ public class PlayerController : MonoBehaviour
     public Animator anim;
 
     public GroundCheck groundCheck;
-    
+
     // Start is called before the first frame update
     void Start()
     {
