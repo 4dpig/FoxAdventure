@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class GroundCheck : MonoBehaviour
 {
+    public Sprite sprite;
+    
     // 记录玩家是否在地面
     private bool isGrounded = true;
     
