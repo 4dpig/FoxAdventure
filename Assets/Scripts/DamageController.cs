@@ -24,7 +24,7 @@ public class DamageController : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            PlayerHealthController.instance.takeDamage(damage);
+            PlayerHealthController.instance.TakeDamage(damage);
         }
     }
 }
