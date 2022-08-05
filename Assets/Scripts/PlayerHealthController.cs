@@ -13,10 +13,19 @@ public class PlayerHealthController : MonoBehaviour
     private int maxHealth;
     private int currentHealth;
 
+    // 无敌时间相关参数
     public float invincibleLength;
     private float invincibleCounter;
+    
+    // 受到伤害时的击退效果参数
+    // 击退效果持续时长 要比 无敌时间持续时长 要短，并在击退过程中显示player_hurt动画
+    public float knockBackLength;
+    public float knockBackForce;
+    private float knockBackCounter;
+    public float GetKnockBackCounter() { return knockBackCounter; }
 
     private SpriteRenderer sr;
+    private Animator anim;
 
     private void Awake()
     {
@@ -27,6 +36,7 @@ public class PlayerHealthController : MonoBehaviour
     void Start()
     {
         sr = this.GetComponent<SpriteRenderer>();
+        anim = this.GetComponent<Animator>();
         
         // 一颗心等于2个health point
         maxHealth = heartNumber * 2;
@@ -34,6 +44,9 @@ public class PlayerHealthController : MonoBehaviour
         
         // 一开始将invincibleCounter设为invincibleLength，这样最开始player就不是无敌的
         invincibleCounter = invincibleLength;
+        
+        // 一开始就把knockBackCounter设为knockBackLength，因为游戏一开始玩家是非无敌状态。
+        knockBackCounter = knockBackLength;
     }
 
     // Update is called once per frame
@@ -50,6 +63,23 @@ public class PlayerHealthController : MonoBehaviour
                 // 把Player重新设为不透明
                 sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 1f);
             }
+
+            if (knockBackCounter < knockBackLength)
+            {
+                // 更新knockBack coutner
+                knockBackCounter += Time.deltaTime;
+
+                if (knockBackCounter >= knockBackLength)
+                {
+                    // 把速度重置为0
+                    anim.SetFloat("absHSpeed", 0);
+                    anim.SetFloat("vSpeed", 0);
+                    PlayerController.instance.ResetVelocity();
+                    
+                    // 重新设回原来的动画
+                    anim.SetBool("isBeingKnockedBack", false);
+                }
+            }
         }
     }
 
@@ -61,15 +91,22 @@ public class PlayerHealthController : MonoBehaviour
             UIController.instance.ReduceHealth(damage);
         
             currentHealth -= damage;
-            if (currentHealth <= 0)
+            if (currentHealth > 0)
+            {
+                // 更新invincible counter为0
+                invincibleCounter = 0;
+                // 把player设置为半透明，表示目前处于无敌状态
+                sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 0.5f);
+                
+                // 重设knockBackCounter
+                knockBackCounter = 0;
+                // knock back期间，设为player_hurt动画
+                anim.SetBool("isBeingKnockedBack", true);
+            }
+            else
             {
                 this.gameObject.SetActive(false);
             }
-            
-            // 更新invincible counter为0
-            invincibleCounter = 0;
-            // 把player设置为半透明，表示目前处于无敌状态
-            sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 0.5f);
         }
     }
     
