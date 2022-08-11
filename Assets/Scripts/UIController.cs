@@ -103,4 +103,17 @@ public class UIController : MonoBehaviour
         // 更新 最右边的非空心的下标 为i
         indexOfRightmostNonEmptyHeart = i;
     }
+
+    public void Reset()
+    {
+        // 重置为满心
+        for (int i = 0; i < heartNumber; i++)
+        {
+            hearts[i].heartImage.sprite = full_heart;
+            hearts[i].currentHealthPoint = 2;
+        }
+        
+        // 重置下标
+        indexOfRightmostNonEmptyHeart = heartNumber - 1;
+    }
 }

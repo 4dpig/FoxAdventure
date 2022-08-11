@@ -24,6 +24,7 @@ public class PlayerHealthController : MonoBehaviour
     private float knockBackCounter;
     public float GetKnockBackCounter() { return knockBackCounter; }
 
+    private Transform player;
     private SpriteRenderer sr;
     private Animator anim;
 
@@ -104,10 +105,14 @@ public class PlayerHealthController : MonoBehaviour
                 anim.SetBool("isBeingKnockedBack", true);
             }
             else
-            {
-                this.gameObject.SetActive(false);
+            { 
+                LevelManager.instance.RespawnPlayer();
             }
         }
     }
-    
+
+    public void Reset()
+    {
+        currentHealth = maxHealth;
+    }
 }

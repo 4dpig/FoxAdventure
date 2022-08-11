@@ -167,4 +167,9 @@ public class PlayerController : MonoBehaviour
     {
         rb.velocity = Vector2.zero;
     }
+
+    public void TeleportTo(Vector3 position)
+    {
+        this.transform.position = position;
+    }
 }
