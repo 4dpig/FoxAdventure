@@ -6,8 +6,10 @@ using UnityEngine;
 public class LevelManager : MonoBehaviour
 {
     public static LevelManager instance;
+    public PlayerDeathEffect playerDeathEffect;
     public float timeToWaitBeforeRespawn;
     private Vector3 levelBeginPosition;
+    
     private void Awake()
     {
         instance = this;
@@ -26,22 +28,36 @@ public class LevelManager : MonoBehaviour
         
     }
 
-    public void RespawnPlayer()
+    public void RespawnPlayer(bool dieOutsideMap)
     {
-        StartCoroutine(RespawnCoroutine());
+        StartCoroutine(RespawnCoroutine(dieOutsideMap));
     }
     
-    private IEnumerator RespawnCoroutine()
+    private IEnumerator RespawnCoroutine(bool dieOutsideMap)
     {
-        // 先禁用Player，然后等待指定时间后再进行复活相关的操作
+        // 先禁用Player
         PlayerController.instance.gameObject.SetActive(false);
+        
+        // 播放死亡效果
+        playerDeathEffect.gameObject.SetActive(true);
+        playerDeathEffect.StartDeathEffect(dieOutsideMap);
+        while (!playerDeathEffect.IsFinished())
+        {
+            yield return null;
+        }
+        // 播放结束，禁用deathEffect。
+        playerDeathEffect.gameObject.SetActive(false);
+        
+        // 等待指定时间后复活玩家
         yield return new WaitForSeconds(timeToWaitBeforeRespawn);
-
+        
         // 重新启用Player
         PlayerController.instance.gameObject.SetActive(true);
-        // 重置健康值、健康UI
+        
+        // 重设Player
+        PlayerController.instance.Reset();
+        // 重置健康
         PlayerHealthController.instance.Reset();
-        UIController.instance.Reset();
         // 玩家传送到重生点
         CheckPointManager currentCheckPoint = CheckPointManager.currentCheckPoint;
         if (currentCheckPoint != null)

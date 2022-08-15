@@ -163,8 +163,30 @@ public class PlayerController : MonoBehaviour
         return !Physics2D.OverlapCircle(center, 0.2f, groundLayer);
     }
 
+    public void Reset()
+    {
+        // 重设朝向为右
+        sr.flipX = false;
+        
+        // 重设速度
+        ResetVelocity();
+        
+        // 重设player为站立状态
+        moveSpeed = runningSpeed;
+        canJump = true;
+        standingCollider.enabled = true;
+        crouchingCollider.enabled = false;
+
+        // 重设剩余的一些动画参数
+        anim.SetBool("isGrounded", true);
+        anim.SetBool("isBeingKnockedBack", false);
+        anim.SetBool("isCrouching", false);
+    }
+
     public void ResetVelocity()
     {
+        anim.SetFloat("absHSpeed", 0);
+        anim.SetFloat("vSpeed", 0);
         rb.velocity = Vector2.zero;
     }
 

@@ -72,9 +72,7 @@ public class PlayerHealthController : MonoBehaviour
 
                 if (knockBackCounter >= knockBackLength)
                 {
-                    // 把速度重置为0
-                    anim.SetFloat("absHSpeed", 0);
-                    anim.SetFloat("vSpeed", 0);
+                    // 速度重置为0
                     PlayerController.instance.ResetVelocity();
                     
                     // 重新设回原来的动画
@@ -84,12 +82,25 @@ public class PlayerHealthController : MonoBehaviour
         }
     }
 
+    public void Heal(int healAmount)
+    {
+        // 更新heart ui
+        HeartUIController.instance.IncreaseHealth(healAmount);
+        
+        // 更新当前生命值
+        currentHealth += healAmount;
+        if (currentHealth > maxHealth)
+        {
+            currentHealth = maxHealth;
+        }
+    }
+
     public void TakeDamage(int damage)
     {
         if (invincibleCounter >= invincibleLength)
         {
             // 更新heart ui
-            UIController.instance.ReduceHealth(damage);
+            HeartUIController.instance.ReduceHealth(damage);
         
             currentHealth -= damage;
             if (currentHealth > 0)
@@ -106,7 +117,7 @@ public class PlayerHealthController : MonoBehaviour
             }
             else
             { 
-                LevelManager.instance.RespawnPlayer();
+                LevelManager.instance.RespawnPlayer(false);
             }
         }
     }
@@ -114,5 +125,12 @@ public class PlayerHealthController : MonoBehaviour
     public void Reset()
     {
         currentHealth = maxHealth;
+        // 重置UI
+        HeartUIController.instance.Reset();
+    }
+    
+    public bool IsFullHealth()
+    {
+        return currentHealth == maxHealth;
     }
 }

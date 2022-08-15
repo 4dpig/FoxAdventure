@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,9 +17,9 @@ public class Heart
     }
 }
 
-public class UIController : MonoBehaviour
+public class HeartUIController : MonoBehaviour
 {
-    public static UIController instance;
+    public static HeartUIController instance;
 
     public Sprite full_heart;
     public Sprite half_heart;
@@ -27,6 +28,7 @@ public class UIController : MonoBehaviour
     public GameObject heart_prefab;
 
     private int heartNumber;
+    private int indexOfLeftMostNonFullHeart;
     private int indexOfRightmostNonEmptyHeart;
     private Heart[] hearts;
 
@@ -41,10 +43,13 @@ public class UIController : MonoBehaviour
         // 从healthController处获取heart数
         heartNumber = PlayerHealthController.instance.heartNumber;
 
-        // 给数组分配内存
-        hearts = new Heart[heartNumber];
+        // 设置下标，当最右边的非满心坐标设为heartNumber时，表示玩家为满心
+        indexOfLeftMostNonFullHeart = heartNumber;
         indexOfRightmostNonEmptyHeart = heartNumber - 1;
         
+        // 给数组分配内存
+        hearts = new Heart[heartNumber];
+
         // 动态生成每一个heart ui物体
         for (int i = 0; i < heartNumber; i++)
         {
@@ -68,6 +73,53 @@ public class UIController : MonoBehaviour
         
     }
 
+    public void IncreaseHealth(int healAmount)
+    {
+        // 从最左边的非满心开始，向后加
+        int i = indexOfLeftMostNonFullHeart;
+
+        while (healAmount > 0 && i < heartNumber)
+        {
+            Heart heart = hearts[i];
+
+            if (healAmount >= 2)
+            {
+                healAmount -= ( 2 - heart.currentHealthPoint);
+                heart.currentHealthPoint = 2;
+                heart.heartImage.sprite = full_heart;
+                i++;
+            }
+            else
+            {
+                heart.currentHealthPoint += healAmount;
+                healAmount = 0;
+
+                if (heart.currentHealthPoint == 2)
+                {
+                    heart.heartImage.sprite = full_heart;
+                    i++;
+                }
+                else
+                {
+                    heart.heartImage.sprite = half_heart;
+                }
+            }
+        }
+        
+        // 更新 最左边的非满心的下标 为i
+        indexOfLeftMostNonFullHeart = i;
+        
+        // 更新 最右边的非空心的下标
+        if (i == heartNumber || hearts[i].currentHealthPoint == 0)
+        {
+            indexOfRightmostNonEmptyHeart = i - 1;
+        }
+        else
+        {
+            indexOfRightmostNonEmptyHeart = i;
+        }
+    }
+
     public void ReduceHealth(int damage)
     {
         // 从最右边的非空心开始，向前减
@@ -86,6 +138,8 @@ public class UIController : MonoBehaviour
             else
             {
                 heart.currentHealthPoint -= damage;
+                damage = 0;
+                
                 if (heart.currentHealthPoint > 0)
                 {
                     heart.heartImage.sprite = half_heart;
@@ -95,13 +149,21 @@ public class UIController : MonoBehaviour
                     heart.heartImage.sprite = empty_heart;
                     i--;
                 }
-
-                damage = 0;
             }
         }
         
         // 更新 最右边的非空心的下标 为i
         indexOfRightmostNonEmptyHeart = i;
+        
+        // 更新 最左边的非满心的下标
+        if (i < 0 || hearts[i].currentHealthPoint == 2)
+        {
+            indexOfLeftMostNonFullHeart = i + 1;
+        }
+        else
+        {
+            indexOfLeftMostNonFullHeart = i;
+        }
     }
 
     public void Reset()
@@ -114,6 +176,7 @@ public class UIController : MonoBehaviour
         }
         
         // 重置下标
+        indexOfLeftMostNonFullHeart = heartNumber;
         indexOfRightmostNonEmptyHeart = heartNumber - 1;
     }
 }

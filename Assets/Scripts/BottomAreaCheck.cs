@@ -21,7 +21,7 @@ public class BottomAreaCheck : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            LevelManager.instance.RespawnPlayer();
+            LevelManager.instance.RespawnPlayer(true);
         }
     }
 }

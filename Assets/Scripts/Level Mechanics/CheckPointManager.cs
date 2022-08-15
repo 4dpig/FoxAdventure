@@ -17,7 +17,6 @@ public class CheckPointManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log(currentCheckPoint);
         sr = this.GetComponent<SpriteRenderer>();
         // 将checkPoint的顶部中点设为重生点坐标
         respawnPosition = new Vector3(sr.bounds.center.x, sr.bounds.max.y, 0f);
