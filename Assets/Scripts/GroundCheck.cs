@@ -40,7 +40,7 @@ public class GroundCheck : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Ground"))
+        if (other.CompareTag("Ground"))
         {
             isGrounded = true;
             // 回到地面上后，重置连续跳跃次数
@@ -50,7 +50,7 @@ public class GroundCheck : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Ground"))
+        if (other.CompareTag("Ground"))
         {
             isGrounded = false;
         }

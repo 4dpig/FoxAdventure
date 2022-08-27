@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -13,6 +14,9 @@ public class PlayerController : MonoBehaviour
     
     public float jumpForce;
     private bool canJump;
+
+    // 玩家踩到敌人头上时，造成的伤害值
+    public int stepOnDamage;
 
     public SpriteRenderer sr;
     public Rigidbody2D rb;
@@ -183,6 +187,17 @@ public class PlayerController : MonoBehaviour
         anim.SetBool("isCrouching", false);
     }
 
+    public void GetExtraJumpForceWhenStepOnEnemy()
+    {
+        // 设置animator参数
+        anim.SetFloat("vSpeed", jumpForce);
+
+        // 设置速度
+        rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+        // 更新lastSpeedDirection
+        setLastSpeedDirection(rb.velocity.x, jumpForce);
+    }
+
     public void ResetVelocity()
     {
         anim.SetFloat("absHSpeed", 0);
@@ -193,5 +208,10 @@ public class PlayerController : MonoBehaviour
     public void TeleportTo(Vector3 position)
     {
         this.transform.position = position;
+    }
+
+    public bool IsFalling()
+    {
+        return !groundCheck.IsGrounded() && rb.velocity.y < 0;
     }
 }

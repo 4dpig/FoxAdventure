@@ -133,4 +133,9 @@ public class PlayerHealthController : MonoBehaviour
     {
         return currentHealth == maxHealth;
     }
+
+    public bool IsInvincible()
+    {
+        return invincibleCounter < invincibleLength;
+    }
 }
