@@ -46,6 +46,8 @@ public abstract class EnemyController : MonoBehaviour
 
             if (health <= 0)
             {
+                // 播放死亡音效
+                AudioManager.instance.PlaySoundEffect(AudioManager.SoundEffectName.Enemy_Explode);
                 // 生成死亡效果
                 Instantiate(deathEffectPrefab, this.transform.position, this.transform.rotation);
                 // 销毁这个gameobject

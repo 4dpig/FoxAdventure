@@ -27,6 +27,8 @@ public class Cherry : MonoBehaviour
         {
             // 防止同一个Cherry被拾取多次
             isCollected = true;
+            // 播放拾取音效
+            AudioManager.instance.PlaySoundEffect(AudioManager.SoundEffectName.Pickup_Health);
             // 播放拾取动画
             anim.SetBool("isCollected", true);
         }

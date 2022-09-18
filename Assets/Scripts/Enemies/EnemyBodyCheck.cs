@@ -25,7 +25,6 @@ public class EnemyBodyCheck : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             enemyController.DamagePlayer();
-           
         }
         else if (other.CompareTag("PlayerFeet"))
         {

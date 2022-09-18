@@ -26,6 +26,8 @@ public class Gem : MonoBehaviour
         {
             // 防止同一个Gem被拾取多次
             isCollected = true;
+            // 播放拾取音效
+            AudioManager.instance.PlaySoundEffect(AudioManager.SoundEffectName.Pickup_Gem);
             // 播放拾取动画
             anim.SetBool("isCollected", true);
         }

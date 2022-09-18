@@ -80,7 +80,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7245313847194014395}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: TopPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -283,6 +283,7 @@ MonoBehaviour:
   runningSpeed: 8
   crouchingSpeed: 5
   jumpForce: 15
+  stepOnJumpForce: 12
   stepOnDamage: 1
   sr: {fileID: 7245313847462864815}
   rb: {fileID: 7245313847462864814}
@@ -320,9 +321,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4958157934903607440}
   - component: {fileID: 2226300192629222111}
-  m_Layer: 7
+  - component: {fileID: 7483753388071920328}
+  m_Layer: 0
   m_Name: StompBox
-  m_TagString: Untagged
+  m_TagString: PlayerFeet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -349,13 +351,13 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7328822593201031054}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.062268257, y: -1.0706546}
+  m_Offset: {x: -0.062268257, y: -1.081651}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -366,5 +368,21 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.63941, y: 0.100271225}
+  m_Size: {x: 0.63941, y: 0.08753884}
   m_EdgeRadius: 0
+--- !u!70 &7483753388071920328
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7328822593201031054}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.06345941, y: -1.071082}
+  m_Size: {x: 0.6748075, y: 0.10148479}
+  m_Direction: 1

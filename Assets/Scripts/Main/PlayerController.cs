@@ -15,6 +15,8 @@ public class PlayerController : MonoBehaviour
     public float jumpForce;
     private bool canJump;
 
+    // 玩家踩到敌人头上时，获得的额外弹跳力
+    public int stepOnJumpForce;
     // 玩家踩到敌人头上时，造成的伤害值
     public int stepOnDamage;
 
@@ -193,9 +195,9 @@ public class PlayerController : MonoBehaviour
         anim.SetFloat("vSpeed", jumpForce);
 
         // 设置速度
-        rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+        rb.velocity = new Vector2(rb.velocity.x, stepOnJumpForce);
         // 更新lastSpeedDirection
-        setLastSpeedDirection(rb.velocity.x, jumpForce);
+        setLastSpeedDirection(rb.velocity.x, stepOnJumpForce);
     }
 
     public void ResetVelocity()

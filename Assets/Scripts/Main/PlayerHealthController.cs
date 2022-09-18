@@ -99,6 +99,9 @@ public class PlayerHealthController : MonoBehaviour
     {
         if (invincibleCounter >= invincibleLength)
         {
+            // 播放受伤音效
+            AudioManager.instance.PlaySoundEffect(AudioManager.SoundEffectName.Player_Hurt);
+            
             // 更新heart ui
             HeartUIController.instance.ReduceHealth(damage);
         
