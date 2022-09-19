@@ -1,6 +1,7 @@
 using System;using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class AudioManager : MonoBehaviour
 {
@@ -31,6 +32,10 @@ public class AudioManager : MonoBehaviour
     // 存储游戏中用到的所有音效
     public SoundEffectItem[] soundEffectItems;
     private Dictionary<SoundEffectName, AudioSource> soundEffectDict;
+    
+    // 关卡bgm和胜利音乐
+    public AudioSource levelBGM;
+    public AudioSource levelVictoryMusic;
 
     private void Awake()
     {
@@ -56,9 +61,13 @@ public class AudioManager : MonoBehaviour
 
     public void PlaySoundEffect(SoundEffectName audioName)
     {
+        // 获取要播放的音源
         AudioSource audioSource = soundEffectDict[audioName];
         // 如果当前正在播放，先停止播放，然后再重新播放
         audioSource.Stop();
+        
+        // 每次播放前，设置音调为随机值，让声音每次听起来都稍微有些不同
+        audioSource.pitch = Random.Range(0.9f, 1.1f);
         audioSource.Play();
     }
 }

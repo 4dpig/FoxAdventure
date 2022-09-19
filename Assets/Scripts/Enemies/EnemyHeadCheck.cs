@@ -1,9 +1,8 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyBodyCheck : MonoBehaviour
+public class EnemyHeadCheck : MonoBehaviour
 {
     private EnemyController enemyController;
     
@@ -11,7 +10,6 @@ public class EnemyBodyCheck : MonoBehaviour
     void Start()
     {
         enemyController = gameObject.transform.parent.GetComponent<EnemyController>();
-        Debug.Log(enemyController);
     }
 
     // Update is called once per frame
@@ -24,8 +22,18 @@ public class EnemyBodyCheck : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            enemyController.DamagePlayer();
+            enemyController.TakeStepOnDamage();
         }
+        
+    }
+    
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.collider.CompareTag("Player"))
+        {
+            enemyController.TakeStepOnDamage();
+        }
+        
     }
     
 }

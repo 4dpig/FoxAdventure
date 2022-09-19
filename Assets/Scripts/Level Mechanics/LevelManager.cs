@@ -37,6 +37,8 @@ public class LevelManager : MonoBehaviour
     {
         // 先禁用Player
         PlayerController.instance.gameObject.SetActive(false);
+        // 播放死亡音效
+        AudioManager.instance.PlaySoundEffect(AudioManager.SoundEffectName.Player_Death);
         
         // 播放死亡效果
         playerDeathEffect.gameObject.SetActive(true);

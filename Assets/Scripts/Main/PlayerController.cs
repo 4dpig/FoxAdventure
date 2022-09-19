@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Video;
 
 public class PlayerController : MonoBehaviour
 {
@@ -94,6 +95,8 @@ public class PlayerController : MonoBehaviour
 
             if (canJump && groundCheck.GetContinuousJumpTimes() != 2 && Input.GetButtonDown("Jump"))
             {
+                // 播放跳跃音效
+                AudioManager.instance.PlaySoundEffect(AudioManager.SoundEffectName.Player_Jump);
                 groundCheck.PlusContinuousJumpTimes();
                 vSpeed = jumpForce;
             }
