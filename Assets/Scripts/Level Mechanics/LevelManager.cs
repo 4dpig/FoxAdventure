@@ -6,10 +6,20 @@ using UnityEngine;
 public class LevelManager : MonoBehaviour
 {
     public static LevelManager instance;
+    
+    // 玩家死亡和重生相关的字段
     public PlayerDeathEffect playerDeathEffect;
     public float timeToWaitBeforeRespawn;
     private Vector3 levelBeginPosition;
     
+    // 记录游戏状态（暂停 / 运行中）
+    private bool isGameRunning = true;
+    public bool IsGameRunning
+    {
+        get { return isGameRunning; }
+        set { isGameRunning = value;  }
+    }
+
     private void Awake()
     {
         instance = this;

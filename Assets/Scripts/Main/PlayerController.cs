@@ -80,52 +80,57 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float knockBackLength = PlayerHealthController.instance.knockBackLength;
-        float knockBackCounter = PlayerHealthController.instance.GetKnockBackCounter();
-        float knockBackForce = PlayerHealthController.instance.knockBackForce;
-        
-        if (knockBackCounter >= knockBackLength)
+        // 如果游戏没有暂停，则可以进行player的相关操作
+        if (LevelManager.instance.IsGameRunning)
         {
-            // 处理蹲下的相关问题
-            dealCrouch();
+            float knockBackLength = PlayerHealthController.instance.knockBackLength;
+            float knockBackCounter = PlayerHealthController.instance.GetKnockBackCounter();
+            float knockBackForce = PlayerHealthController.instance.knockBackForce;
+        
+            if (knockBackCounter >= knockBackLength)
+            {
+                // 处理蹲下的相关问题
+                dealCrouch();
             
-            // 计算横向和竖向的移动速度
-            float hSpeed = Input.GetAxis("Horizontal") * moveSpeed;
-            float vSpeed = rb.velocity.y;
+                // 计算横向和竖向的移动速度
+                float hSpeed = Input.GetAxis("Horizontal") * moveSpeed;
+                float vSpeed = rb.velocity.y;
 
-            if (canJump && groundCheck.GetContinuousJumpTimes() != 2 && Input.GetButtonDown("Jump"))
-            {
-                // 播放跳跃音效
-                AudioManager.instance.PlaySoundEffect(AudioManager.SoundEffectName.Player_Jump);
-                groundCheck.PlusContinuousJumpTimes();
-                vSpeed = jumpForce;
-            }
+                if (canJump && groundCheck.GetContinuousJumpTimes() != 2 && Input.GetButtonDown("Jump"))
+                {
+                    // 播放跳跃音效
+                    AudioManager.instance.PlaySoundEffect(AudioManager.SoundEffectName.Player_Jump);
+                    groundCheck.PlusContinuousJumpTimes();
+                    vSpeed = jumpForce;
+                }
 
-            // 设置翻转
-            if (hSpeed < 0)
-            {
-                sr.flipX = true;
-            }
-            else if(hSpeed > 0)
-            {
-                sr.flipX = false;
-            } 
+                // 设置翻转
+                if (hSpeed < 0)
+                {
+                    sr.flipX = true;
+                }
+                else if(hSpeed > 0)
+                {
+                    sr.flipX = false;
+                } 
         
-            // 设置animator参数
-            anim.SetFloat("absHSpeed", Mathf.Abs(hSpeed));
-            anim.SetFloat("vSpeed", vSpeed);
-            anim.SetBool("isGrounded", groundCheck.IsGrounded());
+                // 设置animator参数
+                anim.SetFloat("absHSpeed", Mathf.Abs(hSpeed));
+                anim.SetFloat("vSpeed", vSpeed);
+                anim.SetBool("isGrounded", groundCheck.IsGrounded());
 
-            // 设置速度
-            rb.velocity = new Vector2(hSpeed, vSpeed);
-            // 更新lastSpeedDirection
-            setLastSpeedDirection(hSpeed, vSpeed);
+                // 设置速度
+                rb.velocity = new Vector2(hSpeed, vSpeed);
+                // 更新lastSpeedDirection
+                setLastSpeedDirection(hSpeed, vSpeed);
+            }
+            else
+            {
+                // 击退时，速度大小等于knockBackForce，方向与上一次由玩家输入所产生的速度相反。
+                rb.velocity = new Vector2(knockBackForce * -lastHSpeedDirection, knockBackForce * -lastVSpeedDirection);
+            }
         }
-        else
-        {
-            // 击退时，速度大小等于knockBackForce，方向与上一次由玩家输入所产生的速度相反。
-            rb.velocity = new Vector2(knockBackForce * -lastHSpeedDirection, knockBackForce * -lastVSpeedDirection);
-        }
+        
     }
 
     private void dealCrouch()

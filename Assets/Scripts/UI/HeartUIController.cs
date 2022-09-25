@@ -53,9 +53,17 @@ public class HeartUIController : MonoBehaviour
         // 动态生成每一个heart ui物体
         for (int i = 0; i < heartNumber; i++)
         {
-            // 从prefab生成一个实例，并将其添加为heartPanel的子物体
+            // 从prefab生成一个实例，并将其parent设为heartGroup
+            GameObject heartObject = Instantiate(heart_prefab, this.gameObject.transform);
+            
+            /*
+             * 如果像下面这样先创建实例再添加parent物体，实例的scale缩放似乎会发生莫名其妙的改变，可能是Unity的bug
             GameObject heartObject = Instantiate(heart_prefab);
             heartObject.transform.parent = this.gameObject.transform;
+            
+             * 不过改变了之后再手动改回来也行，但还是一步到位最好，直接在创建实例的时候就指定parent物体
+            heartObject.GetComponent<RectTransform>().localScale = new Vector3(1f, 1f, 1f);
+            */
             
             /*
              * 给每一个heart分配内存（因为Heart是引用类型，所以创建Heart数组后，其中每一个heart都默认是空引用）

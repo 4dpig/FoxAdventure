@@ -70,4 +70,14 @@ public class AudioManager : MonoBehaviour
         audioSource.pitch = Random.Range(0.9f, 1.1f);
         audioSource.Play();
     }
+
+    public void PauseBGM()
+    {
+        levelBGM.Pause();
+    }
+
+    public void ResumeBGM()
+    {
+        levelBGM.Play();
+    }
 }
